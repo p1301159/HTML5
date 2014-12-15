@@ -11,6 +11,80 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+       <canvas id=dessin width=640 height=480></canvas>
     </body>
 </html>
+
+<script>      
+	  
+	var monCanvas=document.getElementById('dessin');
+
+	if(monCanvas.getContext){
+		var ctx=monCanvas.getContext('2d');
+		ctx.fillStyle="blue";
+		Cercles=[[50,50,50],[150,50,50],[250,50,50]];
+		
+		
+		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
+		cercle(Cercles[1][0],Cercles[1][1],Cercles[1][2]);
+		cercle(Cercles[2][0],Cercles[2][1],Cercles[2][2]);
+		
+		var interval=setInterval(bouleTombe,100);
+		ctx.save();
+	}
+	else{
+		alert('on vous a dit de ne pas utiliser IE!!!!!!!!!!!')
+	}
+	
+	monCanvas.addEventListener('mousedown',sourisdown,false);
+	monCanvas.addEventListener('mouseup',sourisup,false);
+	//monCanvas.addEventListener('click',click,false);
+	
+	var xSourisDoc;	
+	var ySourisDoc;
+	
+	function click(e){
+	xSourisDoc=e.pageX;
+    ySourisDoc=e.pageY;
+		console.log('clic en',xSourisDoc,ySourisDoc);
+	var xCanvas=monCanvas.offsetLeft;
+	var yCanvas=monCanvas.offsetTop;
+	var xSourisCan=xSourisDoc-xCanvas;
+	var ySourisCan=ySourisDoc-yCanvas;
+	
+	console.log(Cercles[0][0]-xSourisDoc);
+	console.log(Cercles[0][1]-ySourisDoc);
+	}
+	
+	function sourisup(e){
+		if((Cercles[0][2]>Math.abs(Cercles[0][0]-e.pageX) )&& (Cercles[0][2]>Math.abs(Cercles[0][1]-e.pageY))){
+			ctx.fillStyle="red";
+			cercle(150,150,50);	
+			console.log("ok");
+		}	
+	}
+	
+	function sourisdown(e){	
+		if((Cercles[0][2]>Math.abs(Cercles[0][0]-e.pageX) )&& (Cercles[0][2]>Math.abs(Cercles[0][1]-e.pageY))){
+			console.log("ok");
+			ctx.fillStyle="blue";
+			cercle(150,150,50);
+		}
+	}
+	
+	function cercle(x,y,r){
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,2*Math.PI,false);
+		ctx.closePath();
+		ctx.stroke();
+		ctx.fill();
+	}
+	
+	function bouleTombe(){
+		ctx.restore();
+		ctx.clearRect(0,0,640,480);
+		Cercles[0][1]=Cercles[0][1]+10;
+		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
+		ctx.save();
+	}
+  </script>
