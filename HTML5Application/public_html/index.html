@@ -22,38 +22,44 @@ and open the template in the editor.
 	if(monCanvas.getContext){
 		var ctx=monCanvas.getContext('2d');
 		ctx.fillStyle="blue";
-		Cercles=[[50,50,50],[150,50,50],[250,50,50]];
+		Cercles=[[10,10,10],[150,50,50],[250,50,50]];
 		
 		
 		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
 		cercle(Cercles[1][0],Cercles[1][1],Cercles[1][2]);
 		cercle(Cercles[2][0],Cercles[2][1],Cercles[2][2]);
 		
-		var interval=setInterval(bouleTombe,100);
+		var interval=setInterval(bouleTombe,1);
+                
 		ctx.save();
 	}
 	else{
-		alert('on vous a dit de ne pas utiliser IE!!!!!!!!!!!')
+		alert('on vous a dit de ne pas utiliser IE!!!!!!!!!!!');
 	}
 	
-	monCanvas.addEventListener('mousedown',sourisdown,false);
-	monCanvas.addEventListener('mouseup',sourisup,false);
-	//monCanvas.addEventListener('click',click,false);
+	//monCanvas.addEventListener('mousedown',sourisdown,false);
+	//monCanvas.addEventListener('mouseup',sourisup,false);
+	monCanvas.addEventListener('click',click,false);
 	
 	var xSourisDoc;	
 	var ySourisDoc;
+        var total_x=0;
+        var total_y=0;
 	
+        
 	function click(e){
-	xSourisDoc=e.pageX;
-    ySourisDoc=e.pageY;
-		console.log('clic en',xSourisDoc,ySourisDoc);
-	var xCanvas=monCanvas.offsetLeft;
-	var yCanvas=monCanvas.offsetTop;
-	var xSourisCan=xSourisDoc-xCanvas;
-	var ySourisCan=ySourisDoc-yCanvas;
-	
-	console.log(Cercles[0][0]-xSourisDoc);
-	console.log(Cercles[0][1]-ySourisDoc);
+            xSourisDoc=e.pageX;
+            ySourisDoc=e.pageY;
+            console.log('clic en',xSourisDoc,ySourisDoc);
+            var xCanvas=monCanvas.offsetLeft;
+            var yCanvas=monCanvas.offsetTop;
+            var xSourisCan=xSourisDoc-xCanvas;
+            var ySourisCan=ySourisDoc-yCanvas;
+
+            console.log(Cercles[0][0]-xSourisDoc);
+            console.log(Cercles[0][1]-ySourisDoc);
+            console.log("ok");
+            boulemove(xSourisDoc,ySourisDoc);
 	}
 	
 	function sourisup(e){
@@ -81,10 +87,29 @@ and open the template in the editor.
 	}
 	
 	function bouleTombe(){
-		ctx.restore();
+                ctx.save();
+		
 		ctx.clearRect(0,0,640,480);
-		Cercles[0][1]=Cercles[0][1]+10;
-		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
-		ctx.save();
+                Cercles[0][0]=Cercles[0][0]+total_x;
+		Cercles[0][1]=Cercles[0][1]+total_y;
+		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);  
+                ctx.restore();
 	}
+        
+        function boulemove(x,y){
+                total_x=(x-Cercles[0][0])/Math.sqrt(x*x+y*y);
+                total_y=(y-Cercles[0][1])/Math.sqrt(x*x+y*y);
+                
+//                for(i=0;i<total_x;i++){
+//                    ctx.save();
+//                    
+//                    ctx.clearRect(0,0,640,480);
+//                    Cercles[0][0]=Cercles[0][0]+i;
+//                    cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]); 
+//                    //console.log(i);
+//                    ctx.restore();
+//                }
+                
+        }
+        
   </script>
