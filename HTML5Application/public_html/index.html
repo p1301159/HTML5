@@ -9,9 +9,10 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-       <canvas id=dessin width=640 height=480></canvas>
+       <canvas id=dessin width=440 height=280></canvas>
     </body>
 </html>
 
@@ -22,7 +23,7 @@ and open the template in the editor.
 	if(monCanvas.getContext){
 		var ctx=monCanvas.getContext('2d');
 		ctx.fillStyle="blue";
-		Cercles=[[10,10,10],[150,50,50],[250,50,50]];
+		Cercles=[[monCanvas.width/2,monCanvas.height-15,10],[150,50,50],[250,50,50]];
 		
 		
 		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
@@ -45,6 +46,10 @@ and open the template in the editor.
 	var ySourisDoc;
         var total_x=0;
         var total_y=0;
+        var delta_x=0;
+        var delta_y=0;
+        var vitesseX = 3;
+        var vitesseY = 3;
 	
         
 	function click(e){
@@ -87,18 +92,39 @@ and open the template in the editor.
 	}
 	
 	function bouleTombe(){
+            
                 ctx.save();
 		
-		ctx.clearRect(0,0,640,480);
-                Cercles[0][0]=Cercles[0][0]+total_x;
-		Cercles[0][1]=Cercles[0][1]+total_y;
-		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);  
+		ctx.clearRect(0,0,monCanvas.width,monCanvas.height);
+            
+                
+		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]); 
+                if((Cercles[0][0]+Cercles[0][2])>=monCanvas.width || Cercles[0][0]<=Cercles[0][2])){
+                    vitesseX *= -1;
+                }else if(Cercles[0][1]<=Cercles[0][2]){
+                    vitesseY *= -1;
+                }else{
+                    Cercles[0][0]=Cercles[0][0]+total_x;
+                    Cercles[0][1]=Cercles[0][1]+total_y;
+                }
+                
+                /*if((Cercles[0][0]+Cercles[0][2])>=monCanvas.width || Cercles[0][0]<=Cercles[0][2])){
+                    vitesseX *= -1;
+                }
+                if(Cercles[0][1]<=Cercles[0][2]){
+                    vitesseY *= -1;
+                }
+                Cercles[0][0]+=vitesseX;
+                Cercles[0][1]+=vitesseY;*/
+                
                 ctx.restore();
 	}
         
         function boulemove(x,y){
-                total_x=(x-Cercles[0][0])/Math.sqrt(x*x+y*y);
-                total_y=(y-Cercles[0][1])/Math.sqrt(x*x+y*y);
+                delta_x=(x-Cercles[0][0]);
+                delta_y=(y-Cercles[0][1]);
+                total_x=delta_x/Math.sqrt(x*x+y*y);
+                total_y=delta_y/Math.sqrt(x*x+y*y);
                 
         }
         
