@@ -23,12 +23,11 @@ and open the template in the editor.
 	if(monCanvas.getContext){
 		var ctx=monCanvas.getContext('2d');
 		ctx.fillStyle="blue";
-		Cercles=[[monCanvas.width/2,monCanvas.height-20,10],[150,50,50],[250,50,50]];
-		
+		Cercles=[[monCanvas.width/2,monCanvas.height-20,10]];
+		var myBalls = new Array();
+                //myBalls.push([monCanvas.width/2,monCanvas.height-20,10]);
 		
 		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
-		cercle(Cercles[1][0],Cercles[1][1],Cercles[1][2]);
-		cercle(Cercles[2][0],Cercles[2][1],Cercles[2][2]);
 		
 		var interval=setInterval(bouleTombe,1);
                 
@@ -48,8 +47,7 @@ and open the template in the editor.
         var total_y=0;
         var delta_x=0;
         var delta_y=0;
-        var vitesseX = 3;
-        var vitesseY = -3;
+        var vitesse = 1;
 	
         
 	function click(e){
@@ -65,22 +63,6 @@ and open the template in the editor.
             console.log(Cercles[0][1]-ySourisDoc);
             console.log("ok");
             boulemove(xSourisDoc,ySourisDoc);
-	}
-	
-	function sourisup(e){
-		if((Cercles[0][2]>Math.abs(Cercles[0][0]-e.pageX) )&& (Cercles[0][2]>Math.abs(Cercles[0][1]-e.pageY))){
-			ctx.fillStyle="red";
-			cercle(150,150,50);	
-			console.log("ok");
-		}	
-	}
-	
-	function sourisdown(e){	
-		if((Cercles[0][2]>Math.abs(Cercles[0][0]-e.pageX) )&& (Cercles[0][2]>Math.abs(Cercles[0][1]-e.pageY))){
-			console.log("ok");
-			ctx.fillStyle="blue";
-			cercle(150,150,50);
-		}
 	}
 	
 	function cercle(x,y,r){
@@ -123,8 +105,9 @@ and open the template in the editor.
                     total_y *= 0;
                     total_x *= 0;
                 }
-                Cercles[0][0]+=total_x;
-                Cercles[0][1]+=total_y;
+                
+                Cercles[0][0]+=total_x*vitesse;
+                Cercles[0][1]+=total_y*vitesse;
                 
                 ctx.restore();
 	}
@@ -132,9 +115,8 @@ and open the template in the editor.
         function boulemove(x,y){
                 delta_x=(x-Cercles[0][0]);
                 delta_y=(y-Cercles[0][1]);
-                total_x=delta_x/Math.sqrt(x*x+y*y);
-                total_y=delta_y/Math.sqrt(x*x+y*y);
-                
+                total_x=delta_x/Math.sqrt(delta_x*delta_x+delta_y*delta_y);
+                total_y=delta_y/Math.sqrt(delta_x*delta_x+delta_y*delta_y);
         }
         
   </script>
