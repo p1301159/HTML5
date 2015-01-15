@@ -36,9 +36,6 @@ and open the template in the editor.
 	else{
 		alert('on vous a dit de ne pas utiliser IE!!!!!!!!!!!');
 	}
-	
-	//monCanvas.addEventListener('mousedown',sourisdown,false);
-	//monCanvas.addEventListener('mouseup',sourisup,false);
 	monCanvas.addEventListener('click',click,false);
 	
 	var xSourisDoc;	
@@ -59,9 +56,8 @@ and open the template in the editor.
             var xSourisCan=xSourisDoc-xCanvas;
             var ySourisCan=ySourisDoc-yCanvas;
 
-            console.log(Cercles[0][0]-xSourisDoc);
-            console.log(Cercles[0][1]-ySourisDoc);
-            console.log("ok");
+            //console.log(Cercles[0][0]-xSourisDoc);
+            //console.log(Cercles[0][1]-ySourisDoc);
             boulemove(xSourisDoc,ySourisDoc);
 	}
 	
@@ -104,10 +100,21 @@ and open the template in the editor.
                 if(Cercles[0][1]<=Cercles[0][2]){
                     total_y *= 0;
                     total_x *= 0;
+                    x=Cercles[0][0];
+                    y=Cercles[0][1];
+                    myBalls.push([x,y,Cercles[0][2]]);
+                    cercle(x,y,50);
+                    //console.log(myBalls[0][0]);
+                    Cercles.push([monCanvas.width/2,monCanvas.height-20,10]);
+                    Cercles.pop();
+                    cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
+                    /*console.log(Cercles.length);
+                    cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);*/
                 }
                 
                 Cercles[0][0]+=total_x*vitesse;
                 Cercles[0][1]+=total_y*vitesse;
+                
                 
                 ctx.restore();
 	}
