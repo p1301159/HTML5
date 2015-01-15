@@ -27,7 +27,7 @@ and open the template in the editor.
                 
 		var myBalls = new Array();
 		var myColors = new Array("blue","red","black","yellow");
-		cercle(Cercles[0][0],Cercles[0][1],rayon,Cercles[0][3]);
+		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]);
 		
 		var interval=setInterval(bouleTombe,1);
                 
@@ -76,8 +76,9 @@ and open the template in the editor.
             
                 for(var i=0;i<myBalls.length;i++){
                     cercle(myBalls[i][0],myBalls[i][1],myBalls[i][2],myBalls[i][3]);
-                    if(myBalls[i][1] <= monCanvas.height-70){
+                     if(myBalls[i][1] >= monCanvas.height-70){
                         myBalls.splice(0,myBalls.length);
+                        alert("You Lose!!!! Try again");
                     }
                 }
                 
