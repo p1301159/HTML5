@@ -22,7 +22,7 @@ and open the template in the editor.
 
 	if(monCanvas.getContext){
 		var ctx=monCanvas.getContext('2d');
-		ctx.fillStyle="blue";
+		ctx.fillStyle="red";
 		Cercles=[[monCanvas.width/2,monCanvas.height-20,10]];
 		var myBalls = new Array();
                 //myBalls.push([monCanvas.width/2,monCanvas.height-20,10]);
@@ -55,9 +55,6 @@ and open the template in the editor.
             var yCanvas=monCanvas.offsetTop;
             var xSourisCan=xSourisDoc-xCanvas;
             var ySourisCan=ySourisDoc-yCanvas;
-
-            //console.log(Cercles[0][0]-xSourisDoc);
-            //console.log(Cercles[0][1]-ySourisDoc);
             boulemove(xSourisDoc,ySourisDoc);
 	}
 	
@@ -75,24 +72,12 @@ and open the template in the editor.
 		
 		ctx.clearRect(0,0,monCanvas.width,monCanvas.height);
             
+                for(var i=0;i<myBalls.length;i++){
+                    cercle(myBalls[i][0],myBalls[i][1],myBalls[i][2]);
+                }
                 
 		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]); 
                 
-                
-                /*Cercles[0][0]=Cercles[0][0]+total_x;
-                Cercles[0][1]=Cercles[0][1]+total_y;
-                */
-               
-                /*
-                 if(((Cercles[0][0]+Cercles[0][2])>=monCanvas.width) || (Cercles[0][0]<=Cercles[0][2])){
-                    vitesseX *= -1;
-                }
-                if(Cercles[0][1]<=Cercles[0][2]){
-                    vitesseY *= -1;
-                }
-                Cercles[0][0]+=vitesseX;
-                Cercles[0][1]+=vitesseY;
-                 */
                 
                 if(((Cercles[0][0]+Cercles[0][2])>=monCanvas.width) || (Cercles[0][0]<=Cercles[0][2])){
                     total_x *= -1;
@@ -104,9 +89,9 @@ and open the template in the editor.
                     y=Cercles[0][1];
                     myBalls.push([x,y,Cercles[0][2]]);
                     cercle(x,y,50);
-                    //console.log(myBalls[0][0]);
+                    console.log(myBalls.length);
                     Cercles.push([monCanvas.width/2,monCanvas.height-20,10]);
-                    Cercles.pop();
+                    Cercles.shift();
                     cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);
                     /*console.log(Cercles.length);
                     cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2]);*/
