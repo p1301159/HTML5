@@ -12,110 +12,145 @@ and open the template in the editor.
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-       <canvas id=dessin width=440 height=280></canvas>
+        <canvas id=dessin width=400 height=400></canvas>
     </body>
 </html>
 
-<script>      
-	  
-	var monCanvas=document.getElementById('dessin');
+<script>
 
-	if(monCanvas.getContext){
-		var ctx=monCanvas.getContext('2d');
-                var rayon=10;
-		Cercles=[[monCanvas.width/2,monCanvas.height-20,10,"blue"]];
-                
-		var myBalls = new Array();
-		var myColors = new Array("blue","red","black","yellow");
-		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]);
-		
-		var interval=setInterval(bouleTombe,1);
-                
-		ctx.save();
-	}
-	else{
-		alert('on vous a dit de ne pas utiliser IE!!!!!!!!!!!');
-	}
-	monCanvas.addEventListener('click',click,false);
-	
-	var xSourisDoc;	
-	var ySourisDoc;
-        var total_x=0;
-        var total_y=0;
-        var delta_x=0;
-        var delta_y=0;
-        var vitesse = 3;
-	
-        
-	function click(e){
-            xSourisDoc=e.pageX;
-            ySourisDoc=e.pageY;
-          //  console.log('clic en',xSourisDoc,ySourisDoc);
-            var xCanvas=monCanvas.offsetLeft;
-            var yCanvas=monCanvas.offsetTop;
-            var xSourisCan=xSourisDoc-xCanvas;
-            var ySourisCan=ySourisDoc-yCanvas;
-            boulemove(xSourisDoc,ySourisDoc);
-	}
-	
-	function cercle(x,y,r,coul){
-            
-		ctx.fillStyle=coul;
-		ctx.beginPath();
-		ctx.arc(x,y,r,0,2*Math.PI,false);
-		ctx.closePath();
-		ctx.stroke();
-		ctx.fill();
-	}
-	
-	function bouleTombe(){
-            
-                ctx.save();
-		
-		ctx.clearRect(0,0,monCanvas.width,monCanvas.height);
-            
-                for(var i=0;i<myBalls.length;i++){
-                    cercle(myBalls[i][0],myBalls[i][1],myBalls[i][2],myBalls[i][3]);
-                     if(myBalls[i][1] >= monCanvas.height-70){
-                        myBalls.splice(0,myBalls.length);
-                        alert("You Lose!!!! Try again");
-                    }
-                }
-                
-		cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]); 
-                if(((Cercles[0][0]+Cercles[0][2])>=monCanvas.width) || (Cercles[0][0]<=Cercles[0][2])){
-                    total_x *= -1;
-                }
-                for (var i = 0; i < myBalls.length; i++) {
-                    distance = Math.sqrt(((Cercles[0][0] - myBalls[i][0]) * (Cercles[0][0] - myBalls[i][0])) + ((Cercles[0][1] - myBalls[i][1]) * (Cercles[0][1] - myBalls[i][1])));
-                    if ((distance - (Cercles[0][2]*2)) <= 2) {
-                        total_y *= 0;
-                        total_x *= 0;
-                        myBalls.push([Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]]);
-                        Cercles.push([monCanvas.width / 2, monCanvas.height - 20, 10,myColors[Math.floor(Math.random()*4)]]);
-                        Cercles.shift();//Permet d'enlever le 1er element
-                        cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]);
-                    }
-                }
-                if (Cercles[0][1] <= Cercles[0][2]) {
-                    total_y *= 0;
-                    total_x *= 0;
-                    myBalls.push([Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]]);
-                    console.log(myBalls.length);
-                    Cercles.push([monCanvas.width / 2, monCanvas.height - 20, 10,myColors[Math.floor(Math.random()*4)]]);
-                    Cercles.shift();//Permet d'enlever le 1er element
-                    cercle(Cercles[0][0],Cercles[0][1],Cercles[0][2],Cercles[0][3]);
-                }
-                Cercles[0][0] += total_x * vitesse;
-                Cercles[0][1] += total_y * vitesse;
-                ctx.restore();
+    var monCanvas = document.getElementById('dessin');
+
+
+    //monCanvas.width=document.body.clientWidth;
+    //monCanvas.height=document.body.clientHeight;
+
+    if (monCanvas.getContext) {
+
+        var ctx = monCanvas.getContext('2d');
+
+        //main();
+    }
+    else {
+        alert('on vous a dit de ne pas utiliser IE!!!!!!!!!!!');
+    }
+
+    //La 1er balle
+    Cercles = [[monCanvas.width / 2, monCanvas.height - 20, "blue"]];
+    //Le tableau contenant les balles qui sont collées
+    var myBalls = new Array();
+    //Les différentes couleurs des balles
+    var myColors = new Array("blue", "red", "black", "yellow");
+
+    //Vecteur unitaire permettant de faire bouger la balle d'une seul unité
+    var total_x = 0;
+    var total_y = 0;
+    //Permet de connaitre la direction dont la balle va prendre
+    var delta_x = 0;
+    var delta_y = 0;
+    //Vitesse de la balle
+    var vitesse = 15;
+    //Permet que le clic du joueur ne soit comptabiliser qu'une seul foix
+    var cptClic = 0;
+    //Rayon des balles
+    var rayonBall = 15;
+    //Limite de jusqu'ou les balles peuvent descendre
+    var limite = 70;
+
+    cercle(Cercles[0][0], Cercles[0][1], Cercles[0][2]);
+    var interval = setInterval(jouer, 1);
+    monCanvas.addEventListener('click', click, false);
+
+    //Fonction permettant de récupérer le clic de la souris
+    function click(e) {
+        xSourisDoc = e.pageX;
+        ySourisDoc = e.pageY;
+        boulemove(xSourisDoc, ySourisDoc);
+    }
+
+    //Fonction permettant de dessiner mon cercle
+    function cercle(x, y, coul) {
+        ctx.fillStyle = coul;
+        ctx.beginPath();
+        ctx.arc(x, y, rayonBall, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+    }
+
+    //Fonction permettant de redéssiner les balles une fois collé et permet de cloturer une partie une fois la limite atteinte
+    function balleUp() {
+        for (var i = 0; i < myBalls.length; i++) {
+            cercle(myBalls[i][0], myBalls[i][1], myBalls[i][2]);
+            if ((myBalls[i][1] + rayonBall) >= monCanvas.height - limite) {
+                alert("You Lose!!!! Try again Your Score: " + myBalls.length);
+                myBalls.splice(0, myBalls.length);
+
             }
-        
-        function boulemove(x,y){
-                delta_x=(x-Cercles[0][0]);
-                delta_y=(y-Cercles[0][1]);
-                total_x=delta_x/Math.sqrt(delta_x*delta_x+delta_y*delta_y);
-                total_y=delta_y/Math.sqrt(delta_x*delta_x+delta_y*delta_y);
+        }
+    }
+
+    //Fonction permettant d'arreter la balle un fois qu'elle touche une autre balle
+    function detecterBall() {
+        for (var i = 0; i < myBalls.length; i++) {
+            distance = Math.sqrt(((Cercles[0][0] - myBalls[i][0]) * (Cercles[0][0] - myBalls[i][0])) + ((Cercles[0][1] - myBalls[i][1]) * (Cercles[0][1] - myBalls[i][1])));
+            if ((distance - (rayonBall * 2)) <= 2) {
+                total_y *= 0;
+                total_x *= 0;
+                myBalls.push([Cercles[0][0], Cercles[0][1], Cercles[0][2]]);
+                Cercles.push([monCanvas.width / 2, monCanvas.height - 20, myColors[Math.floor(Math.random() * myColors.length)]]);
+                Cercles.shift();//Permet d'enlever le 1er element
+                cercle(Cercles[0][0], Cercles[0][1], Cercles[0][2]);
+                cptClic = 0;
+            }
+        }
+    }
+
+    //Fonction permettant de jouer
+    function jouer() {
+        ctx.save();
+        ctx.clearRect(0, 0, monCanvas.width, monCanvas.height);
+
+        balleUp();
+
+        cercle(Cercles[0][0], Cercles[0][1], Cercles[0][2]);
+
+        //Permet de faire rebondire les balles sur les côtes
+        if (((Cercles[0][0] + rayonBall) >= monCanvas.width) || (Cercles[0][0] <= rayonBall)) {
+            total_x *= -1;
+        }
+
+        //Permet d'arreter le balle un fois arriver en haut du canvas
+        if (Cercles[0][1] <= rayonBall) {
+            total_y *= 0;
+            total_x *= 0;
+            myBalls.push([Cercles[0][0], Cercles[0][1], Cercles[0][2]]);
+            console.log(myBalls.length);
+            Cercles.push([monCanvas.width / 2, monCanvas.height - 20, myColors[Math.floor(Math.random() * myColors.length)]]);
+            Cercles.shift();//Permet d'enlever le 1er element
+            cercle(Cercles[0][0], Cercles[0][1], Cercles[0][2]);
+            cptClic = 0;
         }
         
-  </script>
+        //Fonction permettant d'arreter la balle un fois qu'elle touche une autre balle
+        detecterBall();
+
+        Cercles[0][0] += total_x * vitesse;
+        Cercles[0][1] += total_y * vitesse;
+        ctx.restore();
+        
+        //Scrore
+        ctx.strokeText(myBalls.length, 10, 20);
+    }
+
+    //Fonction permettant de connaitre direction et la vitesse de la balle
+    function boulemove(x, y) {
+        if (cptClic === 0) {
+            delta_x = (x - Cercles[0][0]);
+            delta_y = (y - Cercles[0][1]);
+            total_x = delta_x / Math.sqrt(delta_x * delta_x + delta_y * delta_y);
+            total_y = delta_y / Math.sqrt(delta_x * delta_x + delta_y * delta_y);
+            cptClic++;
+        }
+    }
+
+</script>
