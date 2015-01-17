@@ -8,7 +8,6 @@ and open the template in the editor.
     Author     : Ange
 */
 
-#dessin{
+canvas{
     border: 1px black solid;
-    
 }
