@@ -92,7 +92,11 @@ and open the template in the editor.
     function click(e) {
         xSourisDoc = e.pageX;
         ySourisDoc = e.pageY;
-        boulemove(xSourisDoc, ySourisDoc);
+        var xCanvas = monCanvas.offsetLeft;
+        var yCanvas = monCanvas.offsetTop;
+        var xSourisCan = xSourisDoc - xCanvas;
+        var ySourisCan = ySourisDoc - yCanvas;
+        boulemove(xSourisCan, ySourisCan);
     }
 
     //Fonction permettant de dessiner mon cercle
@@ -123,7 +127,7 @@ and open the template in the editor.
         for (var i = 0; i < myBalls.length; i++) {
             //Permet de connaitre la distance entre 2 balles
             distance = Math.sqrt(((Cercles[0][0] - myBalls[i][0]) * (Cercles[0][0] - myBalls[i][0])) + ((Cercles[0][1] - myBalls[i][1]) * (Cercles[0][1] - myBalls[i][1])));
-            if ((distance - (rayonBall * 2)) <= 2) {
+            if ((distance - (rayonBall * 2)) <= 0) {
                 total_y *= 0;
                 total_x *= 0;
                 myBalls.push([Cercles[0][0], Cercles[0][1], Cercles[0][2]]);
@@ -154,7 +158,7 @@ and open the template in the editor.
         }
 
         //Permet d'arreter le balle un fois arriver en haut du canvas
-        if (Cercles[0][1] <= rayonBall + NbfallUp + 3) {
+        if (Cercles[0][1] <= rayonBall + NbfallUp) {
             total_y *= 0;
             total_x *= 0;
             myBalls.push([Cercles[0][0], Cercles[0][1], Cercles[0][2]]);
